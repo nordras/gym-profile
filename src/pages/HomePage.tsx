@@ -1,11 +1,10 @@
-import FrequencyCalendar from '../components/FrequencyCalendar'
+import { useNavigate } from 'react-router-dom'
+import Calendar from '../components/Calendar'
 import ThemeToggle from '../components/ThemeToggle'
 
-interface HomePageProps {
-  onSelectWorkout: (workout: 'A' | 'B') => void
-}
+export default function HomePage() {
+  const navigate = useNavigate()
 
-export default function HomePage({ onSelectWorkout }: HomePageProps) {
   return (
     <section className="min-h-screen bg-base-200 p-4 pb-20">
       <div className="max-w-md mx-auto space-y-4">
@@ -19,21 +18,20 @@ export default function HomePage({ onSelectWorkout }: HomePageProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <button
-            onClick={() => onSelectWorkout('A')}
+            onClick={() => navigate('/treino/A')}
             className="btn btn-lg h-32 bg-base-100 border-2 border-base-content hover:bg-base-300 rounded-lg"
           >
             <span className="text-xl font-bold">TREINO A</span>
           </button>
           <button
-            onClick={() => onSelectWorkout('B')}
+            onClick={() => navigate('/treino/B')}
             className="btn btn-lg h-32 bg-base-100 border-2 border-base-content hover:bg-base-300 rounded-lg"
           >
             <span className="text-xl font-bold">TREINO B</span>
           </button>
         </div>
-
         {/* Calendário Mensal */}
-        <FrequencyCalendar />
+        <Calendar />
       </div>
     </section>
   )
