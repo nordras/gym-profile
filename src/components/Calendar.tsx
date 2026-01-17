@@ -1,4 +1,4 @@
-export default function FrequencyCalendar() {
+export default function Calendar() {
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
@@ -28,6 +28,15 @@ export default function FrequencyCalendar() {
     return day % 2 === 1 ? 'A' : 'B'
   }
 
+  // Verifica se o dia teve treino completado
+  const isWorkoutCompleted = (day: number | null): boolean => {
+    if (day === null) return false
+    
+    const dateStr = new Date(year, month, day).toDateString()
+    const completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts') || '[]')
+    return completedWorkouts.includes(dateStr)
+  }
+
   return (
     <>
       <div className="bg-base-100 border-2 border-base-content rounded-lg p-3 text-center">
@@ -53,6 +62,7 @@ export default function FrequencyCalendar() {
           {calendarDays.map((day, index) => {
             const workout = getWorkoutType(day)
             const isToday = day === today.getDate()
+            const isCompleted = isWorkoutCompleted(day)
 
             return (
               <div
@@ -62,17 +72,23 @@ export default function FrequencyCalendar() {
                   text-sm font-semibold transition-all
                   ${day === null 
                     ? 'bg-transparent' 
-                    : 'bg-base-200 hover:bg-base-300 cursor-pointer border-2 border-base-content'
+                    : isCompleted
+                      ? 'cursor-pointer border-2 border-base-content'
+                      : 'bg-base-200 hover:bg-base-300 cursor-pointer border-2 border-base-content'
                   }
                   ${isToday ? 'ring-2 ring-primary' : ''}
                 `}
+                style={isCompleted ? { backgroundColor: '#56d364' } : {}}
               >
                 {day !== null && (
                   <>
-                    <span className="text-xs">{day}</span>
+                    <span className={`text-xs ${isCompleted ? 'text-white' : ''}`}>{day}</span>
                     <span className={`
                       text-lg font-bold
-                      ${workout === 'A' ? 'text-blue-500' : 'text-green-500'}
+                      ${isCompleted 
+                        ? 'text-white' 
+                        : workout === 'A' ? 'text-blue-500' : 'text-green-500'
+                      }
                     `}>
                       {workout}
                     </span>
