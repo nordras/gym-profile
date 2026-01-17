@@ -1,0 +1,4 @@
+- Usar cores do github para treinos completos
+- Implementar cronometros
+- quando um treino for pulado, devemos confirmar a sequencia do próximo treino ex, se A não foi feito, o próximo deve ser A e B logo depois
+- Implementar exercicios nos treinos
