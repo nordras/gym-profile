@@ -6,6 +6,7 @@ import ThemeToggle from '../components/ThemeToggle'
 export default function HomePage() {
   const navigate = useNavigate()
   const [nextWorkout, setNextWorkout] = useState<'A' | 'B'>('A')
+  const [devMode, setDevMode] = useState(false)
 
   useEffect(() => {
     const lastWorkout = localStorage.getItem('lastWorkout') as 'A' | 'B' | null
@@ -31,7 +32,8 @@ export default function HomePage() {
     const lastWorkoutDate = localStorage.getItem('lastWorkoutDate')
     const today = new Date().toDateString()
     
-    if (lastWorkoutDate === today) {
+    // TODO REMOVE
+    if (!devMode && lastWorkoutDate === today) {
       alert('Você já treinou hoje! Descanse e volte amanhã.')
       return
     }
@@ -69,6 +71,19 @@ export default function HomePage() {
             <span className="text-lg opacity-70">Hoje treino {nextWorkout}</span>
           </div>
         </button>
+
+        {/* Modo Dev */}
+        <div className="form-control">
+          <label className="label cursor-pointer justify-start gap-3 bg-base-100 border-2 border-base-content rounded-lg px-4">
+            <input
+              type="checkbox"
+              checked={devMode}
+              onChange={(e) => setDevMode(e.target.checked)}
+              className="checkbox checkbox-primary"
+            />
+            <span className="label-text font-semibold">Modo Dev (permitir múltiplos treinos/dia)</span>
+          </label>
+        </div>
 
         {/* Calendário Mensal */}
         <Calendar />
