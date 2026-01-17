@@ -1,24 +1,17 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import HomePage from './pages/HomePage'
-import WorkoutDetailPage from './pages/WorkoutDetailPage'
+import WorkoutPage from './pages/WorkoutPage'
 
 function App() {
-  const [selectedWorkout, setSelectedWorkout] = useState<'A' | 'B' | null>(null)
-
-  const handleSelectWorkout = (workout: 'A' | 'B') => {
-    setSelectedWorkout(workout)
-  }
-
-  const handleBack = () => {
-    setSelectedWorkout(null)
-  }
-
-  if (selectedWorkout) {
-    return <WorkoutDetailPage workout={selectedWorkout} onBack={handleBack} />
-  }
-
-  return <HomePage onSelectWorkout={handleSelectWorkout} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/treino/:workout" element={<WorkoutPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
