@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import Calendar from '../components/Calendar'
 import ThemeToggle from '../components/ThemeToggle'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const [nextWorkout, setNextWorkout] = useState<'A' | 'B'>('A')
-  const [devMode, setDevMode] = useState(false)
+  const [devMode, setDevMode] = useState(true)
 
   useEffect(() => {
     const lastWorkout = localStorage.getItem('lastWorkout') as 'A' | 'B' | null
@@ -52,19 +53,25 @@ export default function HomePage() {
   }
 
   return (
-    <section className="min-h-screen bg-base-200 p-4 pb-20">
-      <div className="max-w-md mx-auto space-y-4">
+    <motion.section
+      className="page-section"
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -100 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    >
+      <div className="page-container">
         
         <div className="flex items-center gap-3">
-          <div className="flex-1 bg-base-100 border-2 border-base-content rounded-lg p-4 text-center">
-            <h1 className="text-lg font-bold tracking-wider">TREINOS</h1>
+          <div className="page-header">
+            <h1 className="page-title">TREINOS</h1>
           </div>
           <ThemeToggle />
         </div>
 
         <button
           onClick={handleStartWorkout}
-          className="btn btn-lg w-full h-32 bg-base-100 border-2 border-base-content hover:bg-base-300 rounded-lg"
+          className="btn btn-lg w-full h-32 card-box hover:bg-base-300"
         >
           <div className="flex flex-col items-center gap-2">
             <span className="text-2xl font-bold">INICIAR TREINO</span>
@@ -73,8 +80,8 @@ export default function HomePage() {
         </button>
 
         {/* Modo Dev */}
-        <div className="form-control">
-          <label className="label cursor-pointer justify-start gap-3 bg-base-100 border-2 border-base-content rounded-lg px-4">
+        <section className="form-control absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4">
+          <label className="label cursor-pointer justify-start gap-3 card-box px-4 w-100">
             <input
               type="checkbox"
               checked={devMode}
@@ -83,11 +90,11 @@ export default function HomePage() {
             />
             <span className="label-text font-semibold">Modo Dev (permitir múltiplos treinos/dia)</span>
           </label>
-        </div>
+        </section>
 
         {/* Calendário Mensal */}
         <Calendar />
       </div>
-    </section>
+    </motion.section>
   )
 }
