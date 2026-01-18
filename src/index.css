@@ -2,3 +2,64 @@
 @plugin "daisyui" {
   themes: light, dark;
 }
+
+@layer components {
+  .card-box {
+    @apply bg-base-100 border-2 border-base-content rounded-lg;
+  }
+
+  .page-header {
+    @apply flex-1 bg-base-100 border-2 border-base-content rounded-lg p-4 text-center;
+  }
+
+  .page-title {
+    @apply text-lg font-bold tracking-wider;
+  }
+
+  .page-section {
+    @apply min-h-screen bg-base-200 p-4 pb-20;
+  }
+
+  .page-container {
+    @apply max-w-md mx-auto space-y-4;
+  }
+
+  .page-container-lg {
+    @apply max-w-2xl mx-auto space-y-4;
+  }
+
+  .exercise-card {
+    @apply aspect-square bg-base-100 border-2 border-base-content rounded-lg p-4;
+    @apply flex flex-col items-center justify-center text-center gap-2;
+    @apply hover:shadow-lg transition-shadow;
+  }
+  
+  .exercise-card-number {
+    @apply text-3xl font-black;
+  }
+  
+  .exercise-card-name {
+    @apply text-md font-medium leading-tight;
+  }
+  
+  .exercise-card-sets {
+    @apply text-md opacity-60 mt-auto;
+  }
+
+  .calendar-day {
+    @apply aspect-square rounded-lg flex flex-col items-center justify-center;
+    @apply text-sm font-semibold transition-all;
+  }
+
+  .calendar-day-active {
+    @apply bg-base-200 hover:bg-base-300 cursor-pointer border-2 border-base-content;
+  }
+
+  .calendar-day-completed {
+    @apply cursor-pointer border-2 border-base-content;
+  }
+
+  .btn-back {
+    @apply btn btn-circle btn-ghost border-2 border-base-content;
+  }
+}
