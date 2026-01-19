@@ -1,8 +1,8 @@
 // import { db } from './db';
-import type { Exercise, WorkoutTemplate, WorkoutExercise } from './types';
+import type { Exercise, WorkoutExercise } from './types';
 
 // Lista completa dos 67 aparelhos da academia
-const EXERCISES_DATA: Omit<Exercise, 'id'>[] = [
+export const EXERCISES_DATA: Omit<Exercise, 'id'>[] = [
   { number: 1, name: 'Pulley Alto' },
   { number: 2, name: 'Vertical Traction' },
   { number: 4, name: 'Remada Simetria' },
@@ -71,7 +71,7 @@ const EXERCISES_DATA: Omit<Exercise, 'id'>[] = [
 ];
 
 // Template Treino A - Membros Superiores
-const TREINO_A_EXERCISES: WorkoutExercise[] = [
+export const TREINO_A_EXERCISES: WorkoutExercise[] = [
   { exerciseId: 17, exerciseNumber: 17, exerciseName: 'Supino Vertical Máquina', order: 1, sets: 3, reps: 15, weight: 0, completed: false },
   { exerciseId: 18, exerciseNumber: 18, exerciseName: 'Peck Deck', order: 2, sets: 3, reps: 15, weight: 0, completed: false },
   { exerciseId: 1, exerciseNumber: 1, exerciseName: 'Pulley Alto', order: 3, sets: 3, reps: 12, weight: 0, completed: false },
@@ -83,7 +83,7 @@ const TREINO_A_EXERCISES: WorkoutExercise[] = [
 ];
 
 // Template Treino B - Pernas e Core
-const TREINO_B_EXERCISES: WorkoutExercise[] = [
+export const TREINO_B_EXERCISES: WorkoutExercise[] = [
   { exerciseId: 44, exerciseNumber: 44, exerciseName: 'Leg Horizontal', order: 1, sets: 3, reps: 15, weight: 0, completed: false },
   { exerciseId: 36, exerciseNumber: 36, exerciseName: 'Cadeira Extensora', order: 2, sets: 3, reps: 15, weight: 0, completed: false },
   { exerciseId: 40, exerciseNumber: 40, exerciseName: 'Mesa Flexora', order: 3, sets: 3, reps: 12, weight: 0, completed: false },
