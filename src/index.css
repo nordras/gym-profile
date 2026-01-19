@@ -39,11 +39,11 @@
   }
   
   .exercise-card-name {
-    @apply text-md font-medium leading-tight;
+    @apply text-base font-medium leading-tight;
   }
   
   .exercise-card-sets {
-    @apply text-md opacity-60 mt-auto;
+    @apply text-base opacity-60 mt-auto;
   }
 
   .calendar-day {
