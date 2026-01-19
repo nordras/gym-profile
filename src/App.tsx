@@ -3,6 +3,9 @@ import { AnimatePresence } from 'framer-motion'
 import './App.css'
 import HomePage from './pages/HomePage'
 import WorkoutPage from './pages/WorkoutPage'
+import PWAInstallPrompt from './components/PWAInstallPrompt'
+import PWAUpdatePrompt from './components/PWAUpdatePrompt'
+import OfflineIndicator from './components/OfflineIndicator'
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -21,6 +24,9 @@ function App() {
   return (
     <BrowserRouter>
       <AnimatedRoutes />
+      <PWAInstallPrompt />
+      <OfflineIndicator />
+      <PWAUpdatePrompt />
     </BrowserRouter>
   )
 }
