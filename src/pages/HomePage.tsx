@@ -80,15 +80,15 @@ export default function HomePage() {
         </button>
 
         {/* Modo Dev */}
-        <section className="form-control absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4">
-          <label className="label cursor-pointer justify-start gap-3 card-box px-4 w-100">
+        <section className="form-control fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4">
+          <label className="label cursor-pointer justify-start gap-3 card-box px-3 py-2">
             <input
               type="checkbox"
               checked={devMode}
               onChange={(e) => setDevMode(e.target.checked)}
-              className="checkbox checkbox-primary"
+              className="checkbox checkbox-primary checkbox-sm"
             />
-            <span className="label-text font-semibold">Modo Dev (permitir múltiplos treinos/dia)</span>
+            <span className="label-text text-xs font-semibold">Modo Dev (múltiplos treinos/dia)</span>
           </label>
         </section>
 
