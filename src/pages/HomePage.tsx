@@ -1,33 +1,32 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Calendar from '../components/Calendar'
 import ThemeToggle from '../components/ThemeToggle'
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const [nextWorkout, setNextWorkout] = useState<'A' | 'B'>('A')
-  const [devMode, setDevMode] = useState(true)
-
-  useEffect(() => {
+  
+  const getNextWorkout = (): 'A' | 'B' => {
     const lastWorkout = localStorage.getItem('lastWorkout') as 'A' | 'B' | null
     const lastWorkoutDate = localStorage.getItem('lastWorkoutDate')
     const today = new Date().toDateString()
-        
+    
     if (lastWorkoutDate === today) {
-      setNextWorkout(lastWorkout || 'A')
-      return
+      return lastWorkout || 'A'
     }
     
     if (lastWorkout === 'A') {
-      setNextWorkout('B')
+      return 'B'
     } else if (lastWorkout === 'B') {
-      setNextWorkout('A')
-    } else {
-      const dayOfMonth = new Date().getDate()
-      setNextWorkout(dayOfMonth % 2 === 1 ? 'A' : 'B')
+      return 'A'
     }
-  }, [])
+    
+    return 'A'
+  }
+  
+  const [nextWorkout] = useState<'A' | 'B'>(getNextWorkout)
+  const [devMode, setDevMode] = useState(true)
 
   const handleStartWorkout = () => {
     const lastWorkoutDate = localStorage.getItem('lastWorkoutDate')

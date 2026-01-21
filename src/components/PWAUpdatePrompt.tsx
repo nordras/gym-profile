@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { FiRefreshCw } from 'react-icons/fi';
 
 export default function PWAUpdatePrompt() {
-  const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
-
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -17,11 +15,7 @@ export default function PWAUpdatePrompt() {
     },
   });
 
-  useEffect(() => {
-    if (needRefresh) {
-      setShowUpdatePrompt(true);
-    }
-  }, [needRefresh]);
+  const [showUpdatePrompt, setShowUpdatePrompt] = useState(needRefresh);
 
   const handleUpdate = () => {
     updateServiceWorker(true);

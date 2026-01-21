@@ -8,7 +8,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showPrompt, setShowPrompt] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(() => !window.matchMedia('(display-mode: standalone)').matches);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -22,10 +22,6 @@ export default function PWAInstallPrompt() {
     };
 
     window.addEventListener('beforeinstallprompt', handler);
-
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setShowPrompt(false);
-    }
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
