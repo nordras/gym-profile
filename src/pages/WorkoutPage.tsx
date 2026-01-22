@@ -1,147 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { ExerciseCard } from '@/features/execute-exercise'
+import { GridExerciseCard } from '@/features/execute-exercise/ui/GridExerciseCard'
 import type { WorkoutExercise } from '@/entities/exercise/model/types'
-
-  // Template Treino A - Membros Superiores (será migrado para DB)
-const TREINO_A_EXERCISES: WorkoutExercise[] = [
-  {
-    id: 17,
-    exerciseId: 17,
-    exerciseNumber: 17,
-    exerciseName: 'Supino Vertical Máquina',
-    order: 1,
-    sets: 3,
-    reps: 15,
-    weight: 20.5,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 18,
-    exerciseId: 18,
-    exerciseNumber: 18,
-    exerciseName: 'Peck Deck',
-    order: 2,
-    sets: 3,
-    reps: 15,
-    weight: 25.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 1,
-    exerciseId: 1,
-    exerciseNumber: 1,
-    exerciseName: 'Pulley Alto',
-    order: 3,
-    sets: 3,
-    reps: 12,
-    weight: 30.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 7,
-    exerciseId: 7,
-    exerciseNumber: 7,
-    exerciseName: 'Remada Baixa Máquina',
-    order: 4,
-    sets: 3,
-    reps: 12,
-    weight: 35.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 4,
-    exerciseId: 4,
-    exerciseNumber: 4,
-    exerciseName: 'Remada Simetria',
-    order: 5,
-    sets: 3,
-    reps: 10,
-    weight: 40.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 24,
-    exerciseId: 24,
-    exerciseNumber: 24,
-    exerciseName: 'Bíceps Life',
-    order: 6,
-    sets: 3,
-    reps: 10,
-    weight: 15.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 21,
-    exerciseId: 21,
-    exerciseNumber: 21,
-    exerciseName: 'Cross Over',
-    order: 7,
-    sets: 3,
-    reps: 8,
-    weight: 22.5,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 5,
-    exerciseId: 5,
-    exerciseNumber: 5,
-    exerciseName: 'Elevação Lateral Máquina',
-    order: 8,
-    sets: 3,
-    reps: 8,
-    weight: 18.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-]
+import { TREINO_A_EXERCISES } from '@/data/workoutTemplates'
 
 // Template Treino B - Pernas e Core TODO migrar para DB
 const TREINO_B_EXERCISES: WorkoutExercise[] = [
@@ -286,8 +149,27 @@ const TREINO_B_EXERCISES: WorkoutExercise[] = [
 export default function WorkoutPage() {
   const { workout } = useParams<{ workout: string }>()
   const navigate = useNavigate()
+  const [selectedExerciseId, setSelectedExerciseId] = useState<number | null>(null)
 
-  const exercises = workout === 'A' ? TREINO_A_EXERCISES : TREINO_B_EXERCISES
+  const initialExercises = workout === 'A' ? TREINO_A_EXERCISES : TREINO_B_EXERCISES
+  const [currentExercises, setCurrentExercises] = useState<WorkoutExercise[]>(initialExercises)
+  const selectedExercise = selectedExerciseId ? currentExercises.find(e => e.exerciseId === selectedExerciseId) : null
+
+  // Exercícios pendentes (não completed)
+  const pendingExercises = currentExercises.filter(e => e.status !== 'completed')
+  // Exercícios completos
+  const completedExercises = currentExercises.filter(e => e.status === 'completed')
+
+  // Selecionar exercício ao clicar
+  const handleExerciseClick = (exercise: WorkoutExercise) => {
+    if (exercise.status === 'completed') return;
+    setSelectedExerciseId(exercise.exerciseId);
+  }
+
+  // Atualizar exercício (ex: marcar como completed)
+  const handleUpdateExercise = (updatedExercise: WorkoutExercise) => {
+    setCurrentExercises(prev => prev.map(e => e.exerciseId === updatedExercise.exerciseId ? updatedExercise : e))
+  }
 
   return (
     <motion.section
@@ -297,7 +179,7 @@ export default function WorkoutPage() {
       exit={{ opacity: 0, x: 100 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <div className="page-container-lg">
+      <div className="page-container-lg flex flex-col h-full">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/')}
@@ -313,10 +195,39 @@ export default function WorkoutPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {exercises.map((exercise) => (
-            <ExerciseCard key={exercise.exerciseId} exercise={exercise} />
-          ))}
+        {/* Card do exercício aberto no topo */}
+        {selectedExercise && (
+          <div className="mb-4">
+            <ExerciseCard 
+              exercise={selectedExercise} 
+              isExpanded 
+              onClose={() => setSelectedExerciseId(null)}
+              onUpdate={handleUpdateExercise}
+            />
+          </div>
+        )}
+
+        {/* Grid dos exercícios pendentes e completos */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-4">
+            {pendingExercises.map((exercise) => (
+              <GridExerciseCard 
+                key={exercise.exerciseId} 
+                exercise={exercise} 
+                onClick={() => handleExerciseClick(exercise)}
+                disabled={selectedExerciseId === exercise.exerciseId}
+                className={selectedExerciseId === exercise.exerciseId ? 'opacity-50 pointer-events-none' : ''}
+              />
+            ))}
+            {completedExercises.map((exercise) => (
+              <GridExerciseCard 
+                key={exercise.exerciseId} 
+                exercise={exercise} 
+                disabled
+                className="bg-blue-100 text-blue-700 opacity-60 pointer-events-none"
+              />
+            ))}
+          </div>
         </div>
       </div>
     </motion.section>

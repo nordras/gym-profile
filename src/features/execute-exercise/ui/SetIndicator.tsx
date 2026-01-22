@@ -24,7 +24,7 @@ export function SetIndicator({ exercise }: SetIndicatorProps) {
           <div
             key={setNum}
             className={`
-              flex flex-col items-center gap-1 p-3 rounded-lg min-w-[80px]
+              flex flex-col items-center gap-1 p-3 rounded-lg min-w-20
               ${isCurrent ? 'bg-primary/20 ring-2 ring-primary' : ''}
               ${isCompleted ? 'bg-success/20' : 'bg-base-200'}
               ${isResting ? 'bg-warning/20' : ''}

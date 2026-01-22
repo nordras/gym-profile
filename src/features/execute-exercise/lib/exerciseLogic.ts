@@ -1,4 +1,3 @@
-// features/execute-exercise/lib/exerciseLogic.ts
 import type { WorkoutExercise, SetTiming, ExerciseStatus } from '@/entities/exercise/model/types'
 import { calculateDuration } from '@/shared/lib/formatTime'
 

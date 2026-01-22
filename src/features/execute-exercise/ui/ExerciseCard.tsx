@@ -1,5 +1,6 @@
 // features/execute-exercise/ui/ExerciseCard.tsx
 import { LuSettings, LuClock } from 'react-icons/lu'
+import { useEffect } from 'react'
 import type { WorkoutExercise } from '@/entities/exercise/model/types'
 import { useExerciseExecution } from '../model/useExerciseExecution'
 import { SetIndicator } from './SetIndicator'
@@ -13,9 +14,11 @@ interface ExerciseCardProps {
   exercise: WorkoutExercise
   onEdit?: () => void
   onClose?: () => void
+  isExpanded?: boolean
+  onUpdate?: (updatedExercise: WorkoutExercise) => void
 }
 
-export function ExerciseCard({ exercise, onEdit, onClose }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, onEdit, onClose, isExpanded, onUpdate }: ExerciseCardProps) {
   const {
     exercise: currentExercise,
     handleStart,
@@ -24,6 +27,12 @@ export function ExerciseCard({ exercise, onEdit, onClose }: ExerciseCardProps) {
     handleResume,
     handleStartRest
   } = useExerciseExecution(exercise)
+
+  useEffect(() => {
+    if (onUpdate) {
+      onUpdate(currentExercise)
+    }
+  }, [currentExercise, onUpdate])
 
   const showRestTimer = currentExercise.status === 'resting'
 
@@ -90,7 +99,7 @@ export function ExerciseCard({ exercise, onEdit, onClose }: ExerciseCardProps) {
       {onClose && (
         <div className="flex justify-center mt-4">
           <Button onClick={onClose} variant="ghost" size="sm">
-            Fechar
+            {isExpanded ? 'Voltar ao Grid' : 'Fechar'}
           </Button>
         </div>
       )}
