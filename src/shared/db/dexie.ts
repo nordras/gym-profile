@@ -1,5 +1,6 @@
-import Dexie, { Table } from 'dexie';
-import type { Exercise, WorkoutExercise, WorkoutTemplate, WorkoutSession } from '@/lib/types';
+import Dexie from 'dexie'
+import type { Table } from 'dexie'
+import type { Exercise, WorkoutTemplate, WorkoutSession } from '@/lib/types'
 
 export class GymProfileDB extends Dexie {
   exercises!: Table<Exercise, number>;

@@ -6,6 +6,7 @@ import WorkoutPage from './pages/WorkoutPage'
 import PWAInstallPrompt from './components/PWAInstallPrompt'
 import PWAUpdatePrompt from './components/PWAUpdatePrompt'
 import OfflineIndicator from './components/OfflineIndicator'
+import { WorkoutProvider } from './shared/lib/workoutContext'
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -23,10 +24,12 @@ function AnimatedRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AnimatedRoutes />
-      <PWAInstallPrompt />
-      <OfflineIndicator />
-      <PWAUpdatePrompt />
+      <WorkoutProvider>
+        <AnimatedRoutes />
+        <PWAInstallPrompt />
+        <OfflineIndicator />
+        <PWAUpdatePrompt />
+      </WorkoutProvider>
     </BrowserRouter>
   )
 }

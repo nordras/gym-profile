@@ -1,164 +1,17 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { ExerciseCard } from '@/features/execute-exercise'
 import { GridExerciseCard } from '@/features/execute-exercise/ui/GridExerciseCard'
 import type { WorkoutExercise } from '@/entities/exercise/model/types'
-import { TREINO_A_EXERCISES } from '@/data/workoutTemplates'
-
-// Template Treino B - Pernas e Core TODO migrar para DB
-const TREINO_B_EXERCISES: WorkoutExercise[] = [
-  {
-    id: 44,
-    exerciseId: 44,
-    exerciseNumber: 44,
-    exerciseName: 'Leg Horizontal',
-    order: 1,
-    sets: 3,
-    reps: 15,
-    weight: 45.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 36,
-    exerciseId: 36,
-    exerciseNumber: 36,
-    exerciseName: 'Cadeira Extensora',
-    order: 2,
-    sets: 3,
-    reps: 15,
-    weight: 40.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 40,
-    exerciseId: 40,
-    exerciseNumber: 40,
-    exerciseName: 'Mesa Flexora',
-    order: 3,
-    sets: 3,
-    reps: 12,
-    weight: 50.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 45,
-    exerciseId: 45,
-    exerciseNumber: 45,
-    exerciseName: 'Cadeira Abdutora',
-    order: 4,
-    sets: 3,
-    reps: 12,
-    weight: 35.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 46,
-    exerciseId: 46,
-    exerciseNumber: 46,
-    exerciseName: 'Cadeira Adutora',
-    order: 5,
-    sets: 3,
-    reps: 10,
-    weight: 38.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 64,
-    exerciseId: 64,
-    exerciseNumber: 64,
-    exerciseName: 'Máquina Lombar',
-    order: 6,
-    sets: 3,
-    reps: 10,
-    weight: 55.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 62,
-    exerciseId: 62,
-    exerciseNumber: 62,
-    exerciseName: 'Panturrilha em Pé',
-    order: 7,
-    sets: 3,
-    reps: 8,
-    weight: 60.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-  {
-    id: 61,
-    exerciseId: 61,
-    exerciseNumber: 61,
-    exerciseName: 'Banco Panturrilha',
-    order: 8,
-    sets: 3,
-    reps: 8,
-    weight: 65.0,
-    restTime: 40,
-    status: 'not_started',
-    currentSet: 0,
-    startTime: null,
-    endTime: null,
-    totalDuration: 0,
-    setTimings: []
-  },
-]
+import { useWorkout } from '@/shared/lib/workoutContext'
 
 export default function WorkoutPage() {
-  const { workout } = useParams<{ workout: string }>()
   const navigate = useNavigate()
   const [selectedExerciseId, setSelectedExerciseId] = useState<number | null>(null)
+  const { selectedWorkout, currentExercises, handleWorkoutChange, pendingExercises, completedExercises, setCurrentExercises } = useWorkout()
 
-  const initialExercises = workout === 'A' ? TREINO_A_EXERCISES : TREINO_B_EXERCISES
-  const [currentExercises, setCurrentExercises] = useState<WorkoutExercise[]>(initialExercises)
   const selectedExercise = selectedExerciseId ? currentExercises.find(e => e.exerciseId === selectedExerciseId) : null
-
-  // Exercícios pendentes (não completed)
-  const pendingExercises = currentExercises.filter(e => e.status !== 'completed')
-  // Exercícios completos
-  const completedExercises = currentExercises.filter(e => e.status === 'completed')
 
   // Selecionar exercício ao clicar
   const handleExerciseClick = (exercise: WorkoutExercise) => {
@@ -168,7 +21,7 @@ export default function WorkoutPage() {
 
   // Atualizar exercício (ex: marcar como completed)
   const handleUpdateExercise = (updatedExercise: WorkoutExercise) => {
-    setCurrentExercises(prev => prev.map(e => e.exerciseId === updatedExercise.exerciseId ? updatedExercise : e))
+    setCurrentExercises((prev: WorkoutExercise[]) => prev.map((e: WorkoutExercise) => e.exerciseId === updatedExercise.exerciseId ? updatedExercise : e))
   }
 
   return (
@@ -180,17 +33,40 @@ export default function WorkoutPage() {
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <div className="page-container-lg flex flex-col h-full">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mb-2">
           <button
             onClick={() => navigate('/')}
             className="btn-back"
           >
             ←
           </button>
-          <div className="page-header">
-            <h1 className="page-title">TREINO {workout}</h1>
+          {/* Seletor de treino */}
+          <div className="flex gap-2">
+            <button
+              className={`btn btn-sm ${selectedWorkout === 'A' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => {
+                handleWorkoutChange('A')
+                setSelectedExerciseId(null)
+              }}
+              disabled={selectedWorkout === 'A'}
+            >
+              Treino A
+            </button>
+            <button
+              className={`btn btn-sm ${selectedWorkout === 'B' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => {
+                handleWorkoutChange('B')
+                setSelectedExerciseId(null)
+              }}
+              disabled={selectedWorkout === 'B'}
+            >
+              Treino B
+            </button>
+          </div>
+          <div className="page-header ml-4">
+            <h1 className="page-title">TREINO {selectedWorkout}</h1>
             <p className="text-xs opacity-60 mt-1">
-              {workout === 'A' ? 'Membros Superiores' : 'Pernas e Core'}
+              {selectedWorkout === 'A' ? 'Membros Superiores' : 'Pernas e Core'}
             </p>
           </div>
         </div>
